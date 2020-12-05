@@ -57,7 +57,7 @@ public class Matrice {
             nouveau.setDroite(nouveausousnoeud);
             for (k = 2; k <= concentration_sousnoeuds; k++) {
                 anciensousnoeud = nouveausousnoeud;
-                nouveausousnoeud = new Sousnoeud(nouveau.getX() - (k / (concentration_sousnoeuds + 1)), nouveau.getY(), anciensousnoeud);
+                nouveausousnoeud = new Sousnoeud(nouveau.getX() + (k / (concentration_sousnoeuds + 1)), nouveau.getY(), anciensousnoeud);
                 anciensousnoeud.setSousnoeud2(nouveausousnoeud);
             }
         }//fin du for i

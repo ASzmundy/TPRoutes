@@ -145,35 +145,39 @@ public class Voiture implements Runnable{
     public void run() {
         while (!exit) {
             accelerer();
-            switch (direction) {
-                case 1:
-                    if (isDansnoeud()) { //Si il est dans un carrefour
-                        if (noeud.getHaut() != null) {
-                            sousnoeud = noeud.getHaut();
-                            noeud = null;
-                            dansnoeud = false;
-                        }else exit=true; //si il atteint la fin de la matrice, se détruit
-                    }else {
-
-                    }
-                    break;
-                case 2:
-                    if (isDansnoeud()) {
-
-                    }
-                    break;
-                case 3:
-                    if (isDansnoeud()) {
-
-                    }
-                    break;
-                case 4:
-                    if (isDansnoeud()) {
-
-                    }
-                    break;
-
+            if(isDansnoeud()) { //si il est dans un carrefour
+                switch (direction) {//1=haut 2=droite 3=bas 4=gauche
+                    case 1:
+                        sousnoeud = noeud.getHaut();
+                        noeud = null;
+                        dansnoeud = false;
+                        break;
+                    case 2:
+                        sousnoeud = noeud.getDroite();
+                        noeud = null;
+                        dansnoeud = false;
+                        break;
+                    case 3:
+                        sousnoeud = noeud.getBas();
+                        noeud = null;
+                        dansnoeud = false;
+                        break;
+                    case 4:
+                        sousnoeud = noeud.getGauche();
+                        noeud = null;
+                        dansnoeud = false;
+                }
+            }else{//Si il est dans un sous-noeud
+                if(sousnoeud.getSousnoeud2()!=null)
+                sousnoeud=sousnoeud.getSousnoeud2();
+                else if(sousnoeud.getNoeud()!=null){
+                    noeud=sousnoeud.getNoeud();
+                    sousnoeud=null;
+                }
+                else exit=true;//Si il atteint la fin de la map, s'autodétruit
             }
+
         }
+
     }
 }
