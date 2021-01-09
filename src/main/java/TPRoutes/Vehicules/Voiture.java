@@ -19,17 +19,17 @@ public class Voiture implements Runnable{
 
     //Constructeur
 
-    public Voiture(Noeud noeud, byte direction, float acceleration, float freinage, float vitesse_max) {
-        this.x = noeud.getX();
-        this.y = noeud.getY();
-        this.noeud=noeud;
-        this.direction = (byte)((direction%5)+1);
+    public Voiture(Sousnoeud sousnoeud, byte direction, float acceleration, float freinage, float vitesse_max) {
+        this.x = sousnoeud.getX();
+        this.y = sousnoeud.getY();
+        this.sousnoeud=sousnoeud;
+        this.direction = (byte)((direction%4)+1);
         this.acceleration = abs(acceleration);
         this.freinage=abs(freinage);
         vitesse=0;
         accident=false;
         dansnoeud=true;
-        sousnoeud=null;
+        noeud=null;
         this.vitesse_max=vitesse_max;
     }
 

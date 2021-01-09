@@ -40,7 +40,7 @@ public class FenetreApplication extends Application {
         ArrayList<Voiture> voitures = new ArrayList<>();
 
 
-
+        //Dessin Matrice
         for(int i=0;i<taillematrice;i++){
             for(int j=0;j<taillematrice;j++){
                 Noeud noeud=matrice.getMatrice()[i][j];
@@ -160,18 +160,73 @@ public class FenetreApplication extends Application {
                     }
                 }
             }
+
             if(noeudchoisi!=null) {//si il y a de la place
+                //On prend le sousnoeud au bord de la map
+                Sousnoeud sousnoeudchoisi;
+                switch (senshasardint){ //On va prendre le sousnoeud correspondant où faire apparaitre la voiture
+                    case 1: //le véhicule va de bas en haut
+                        sousnoeudchoisi=noeudchoisi.getBas().getSousnoeud2();
+                        break;
+                    case 2://le véhicule va de gauche à droite
+                        sousnoeudchoisi=noeudchoisi.getGauche();
+                        break;
+                    case 3://le véhicule va de haut en bas
+                        sousnoeudchoisi=noeudchoisi.getHaut();
+                        break;
+                    case 4://le véhicule va de droite à gauche
+                        sousnoeudchoisi=noeudchoisi.getDroite();
+                        break;
+                    default:
+                        throw new ExceptionSensIncorrect();
+                }
+                while(sousnoeudchoisi.getSousnoeud2()!=null){
+                    sousnoeudchoisi=sousnoeudchoisi.getSousnoeud2();
+                }
                 //On crée la voiture
-                Voiture nouveau = new Voiture(noeudchoisi,senshasard, acceleration, freinage,vitessemax);
+                Voiture nouveau = new Voiture(sousnoeudchoisi,senshasard, acceleration, freinage,vitessemax);
                 voitures.add(nouveau);
                 nbvoitures++;
             }
         }
 
-        //Affichage des voitures
-
+        //Dessin et Affichage des voitures
+        float largeurvoiture=zoom/12;
+        float longueurvoiture=zoom/8;
+        Rectangle dessinvoiture;
         for (Voiture voiture:voitures) {
-
+            Sousnoeud sousnoeudvoiture=voiture.getSousnoeud();
+            byte sens = voiture.getDirection();
+            float x,y;
+            switch (sens){
+                case 1: //bas en haut
+                    x=sousnoeudvoiture.getX()*zoom+zoom/20;
+                    y=sousnoeudvoiture.getY()*zoom;
+                    break;
+                case 2://gauche à droite
+                    x=sousnoeudvoiture.getX()*zoom;
+                    y=sousnoeudvoiture.getY()*zoom+zoom/20;
+                    break;
+                case 3://haut en bas
+                    x=sousnoeudvoiture.getX()*zoom-zoom/20;
+                    y=sousnoeudvoiture.getY()*zoom;
+                    break;
+                case 4://droite à gauche
+                    x=sousnoeudvoiture.getX()*zoom;
+                    y=sousnoeudvoiture.getY()*zoom-zoom/20;
+                    break;
+                default:
+                    throw new ExceptionSensIncorrect();
+            }
+            if(sens == 1 || sens ==3){
+                dessinvoiture = new Rectangle(x,y,longueurvoiture, largeurvoiture);
+            }else if (sens == 2 || sens == 4){
+                dessinvoiture = new Rectangle(x,y,largeurvoiture,longueurvoiture);
+            }else{
+                throw new ExceptionSensIncorrect();
+            }
+            dessinvoiture.setFill(Color.RED);
+            root.getChildren().add(dessinvoiture);
         }
 
         //DEFINITION DE LA TIMELINE
