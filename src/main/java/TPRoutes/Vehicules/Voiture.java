@@ -15,11 +15,11 @@ public class Voiture implements Runnable{
     private Noeud noeud;
     private Sousnoeud sousnoeud;
     private boolean exit;
-    private int vitesse_max;
+    private float vitesse_max;
 
     //Constructeur
 
-    public Voiture(Noeud noeud, byte direction, float acceleration, float freinage, int vitesse_max) {
+    public Voiture(Noeud noeud, byte direction, float acceleration, float freinage, float vitesse_max) {
         this.x = noeud.getX();
         this.y = noeud.getY();
         this.noeud=noeud;
