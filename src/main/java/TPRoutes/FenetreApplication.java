@@ -38,6 +38,7 @@ public class FenetreApplication extends Application {
         primaryStage.setTitle("Vroom vroom");
         primaryStage.setScene(scene);
         ArrayList<Voiture> voitures = new ArrayList<>();
+        ArrayList<Rectangle> voituredessins = new ArrayList<>();
 
 
         //Dessin Matrice
@@ -218,7 +219,7 @@ public class FenetreApplication extends Application {
                 default:
                     throw new ExceptionSensIncorrect();
             }
-            if(sens == 1 || sens ==3){
+            if(sens == 1 || sens == 3){
                 dessinvoiture = new Rectangle(x,y,longueurvoiture, largeurvoiture);
             }else if (sens == 2 || sens == 4){
                 dessinvoiture = new Rectangle(x,y,largeurvoiture,longueurvoiture);
@@ -227,12 +228,18 @@ public class FenetreApplication extends Application {
             }
             dessinvoiture.setFill(Color.RED);
             root.getChildren().add(dessinvoiture);
+            voituredessins.add(dessinvoiture);
         }
 
         //DEFINITION DE LA TIMELINE
         Timeline chronologie = new Timeline();
         chronologie.setCycleCount(1);
 
+        //Déplacement des voitures
+        for (Voiture voiture:voitures) {
+            voiture.run();
+
+        }
 
         primaryStage.show();
 

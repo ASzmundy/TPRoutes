@@ -5,7 +5,7 @@ import TPRoutes.Structures.Sousnoeud;
 
 import static java.lang.Math.abs;
 
-public class Voiture implements Runnable{
+public class Voiture{
     private float x,y;
     private float vitesse;
     private float acceleration,freinage;//Puissance d'accélération et de freinage
@@ -28,7 +28,7 @@ public class Voiture implements Runnable{
         this.freinage=abs(freinage);
         vitesse=0;
         accident=false;
-        dansnoeud=true;
+        dansnoeud=false;
         noeud=null;
         this.vitesse_max=vitesse_max;
     }
@@ -124,7 +124,6 @@ public class Voiture implements Runnable{
     //Méthodes
 
     public void accelerer(){
-
         this.vitesse+=acceleration;
     }
 
@@ -174,7 +173,7 @@ public class Voiture implements Runnable{
                     noeud=sousnoeud.getNoeud();
                     sousnoeud=null;
                 }
-                else exit=true;//Si il atteint la fin de la map, s'autodétruit
+                else exit=true;//Si il atteint la fin de la map, sera détruit par le garbagecollecteur
             }
 
         }
