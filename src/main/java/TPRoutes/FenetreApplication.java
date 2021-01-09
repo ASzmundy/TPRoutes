@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -36,7 +37,7 @@ public class FenetreApplication extends Application {
         Scene scene = new Scene(root,800,600, Color.BLACK);
         primaryStage.setTitle("Vroom vroom");
         primaryStage.setScene(scene);
-        Voiture[] voitures = new Voiture[nbvoituresmax];
+        ArrayList<Voiture> voitures = new ArrayList<>();
 
 
 
@@ -101,7 +102,7 @@ public class FenetreApplication extends Application {
         //Spawn des voitures
         int nbvoitures=0;
 
-        while(nbvoitures<nbvoituresmax){ //Tant qu'il y a pas assez de voiture à l'écran
+        while(nbvoitures<nbvoituresmax){ //Tant qu'il y a pas assez de voitures
             int x,y; //point de spawn
             int senshasardint; //version int sens
             byte senshasard; //sens du véhicule casté en byte
@@ -134,34 +135,43 @@ public class FenetreApplication extends Application {
 
             noeudchoisi=matrice.getMatrice()[y][x];
 
-            for (Voiture autrevoiture:voitures) { //On vérifie pour chaque voiture existante...
-                if (autrevoiture.getNoeud() == noeudchoisi) { //si le noeud choisi est occupé
-                    if (senshasardint == 1 || senshasard == 3) { //si on est en haut ou en bas
-                        if (matrice.getMatrice()[y][x - 1] != null) { // on le place à gauche si il existe un noeud à gauche
-                            noeudchoisi = matrice.getMatrice()[x - 1][y];
-                        } else if (matrice.getMatrice()[y][x + 1] != null) { // sinon on le place à droite si le noeud à droite existe
-                            noeudchoisi = matrice.getMatrice()[x + 1][y];
-                        } else {//si il y a plus de place
-                            noeudchoisi = null;
+            if(nbvoitures>0) {
+                for (Voiture autrevoiture:voitures) { //On vérifie pour chaque voiture existante...
+                    if (autrevoiture.getNoeud() == noeudchoisi) { //si le noeud choisi est occupé
+                        if (senshasardint == 1 || senshasard == 3) { //si on est en haut ou en bas
+                            if (matrice.getMatrice()[y][x - 1] != null) { // on le place à gauche si il existe un noeud à gauche
+                                noeudchoisi = matrice.getMatrice()[x - 1][y];
+                            } else if (matrice.getMatrice()[y][x + 1] != null) { // sinon on le place à droite si le noeud à droite existe
+                                noeudchoisi = matrice.getMatrice()[x + 1][y];
+                            } else {//si il y a plus de place
+                                noeudchoisi = null;
+                            }
+                        } else if (senshasardint == 2 || senshasardint == 4) { //si on est à gauche ou à droite
+                            if (matrice.getMatrice()[y - 1][x] != null) { // on le place en haut si il exite un noeud en haut
+                                noeudchoisi = matrice.getMatrice()[y - 1][x];
+                            } else if (matrice.getMatrice()[y + 1][x] != null) { // sinon on le place en bas si le noeud en bas existe
+                                noeudchoisi = matrice.getMatrice()[y + 1][x];
+                            } else {//si il y a plus de place
+                                noeudchoisi = null;
+                            }
+                        } else {
+                            throw new ExceptionSensIncorrect();
                         }
-                    } else if (senshasardint == 2 || senshasardint == 4) { //si on est à gauche ou à droite
-                        if (matrice.getMatrice()[y - 1][x] != null) { // on le place en haut si il exite un noeud en haut
-                            noeudchoisi = matrice.getMatrice()[y - 1][x];
-                        } else if (matrice.getMatrice()[y + 1][x] != null) { // sinon on le place en bas si le noeud en bas existe
-                            noeudchoisi = matrice.getMatrice()[y + 1][x];
-                        } else {//si il y a plus de place
-                            noeudchoisi = null;
-                        }
-                    } else {
-                        throw new ExceptionSensIncorrect();
                     }
                 }
             }
             if(noeudchoisi!=null) {//si il y a de la place
                 //On crée la voiture
                 Voiture nouveau = new Voiture(noeudchoisi,senshasard, acceleration, freinage,vitessemax);
+                voitures.add(nouveau);
                 nbvoitures++;
             }
+        }
+
+        //Affichage des voitures
+
+        for (Voiture voiture:voitures) {
+
         }
 
         //DEFINITION DE LA TIMELINE
