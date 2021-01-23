@@ -4,6 +4,8 @@ import TPRoutes.Exceptions.ExceptionSensIncorrect;
 import TPRoutes.Structures.Matrice;
 import TPRoutes.Structures.Noeud;
 import TPRoutes.Structures.Sousnoeud;
+import TPRoutes.Structures.ThreadGarbageCollector;
+import TPRoutes.Structures.ThreadVoitures;
 import TPRoutes.Vehicules.Voiture;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -39,7 +41,6 @@ public class FenetreApplication extends Application {
         primaryStage.setTitle("Vroom vroom");
         primaryStage.setScene(scene);
         ArrayList<Voiture> voitures = new ArrayList<>();
-        ArrayList<Rectangle> voituredessins = new ArrayList<>();
 
 
         //Dessin Matrice
@@ -247,21 +248,22 @@ public class FenetreApplication extends Application {
             dessinvoiture.setFill(Color.RED);
             voiture.setDessinvoiture(dessinvoiture);
             root.getChildren().add(dessinvoiture);
-            voituredessins.add(dessinvoiture);
         }
 
         //DEFINITION DE LA TIMELINE
         Timeline chronologie = new Timeline();
-        chronologie.setCycleCount(1);
+        chronologie.setCycleCount(Timeline.INDEFINITE);
 
-        //Déplacement des voitures
-        for (Voiture voiture:voitures) {
-            voiture.run();
 
-        }
+
+        //Garbage collector
+        ThreadGarbageCollector TGC=new ThreadGarbageCollector(voitures, root);
 
         primaryStage.show();
 
+        //Déplacement des voitures
+        ThreadVoitures threadVoitures = new ThreadVoitures(voitures,zoom);
+        threadVoitures.start();
         }
 
         public static void main (String[]args){

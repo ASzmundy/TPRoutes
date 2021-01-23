@@ -8,16 +8,16 @@ import static java.lang.Math.abs;
 
 public class Voiture{
     private float x,y;
-    private float vitesse;
+    private float vitesse; // en m/cycle
     private float acceleration,freinage;//Puissance d'accélération et de freinage
     private boolean accident;
     private byte direction;//1=haut 2=droite 3=bas 4=gauche
-    private boolean dansnoeud;
     private Noeud noeud;
     private Sousnoeud sousnoeud;
     private boolean exit;
-    private float vitesse_max;
+    private float vitesse_max; // en m/cycle
     private Rectangle dessinvoiture;
+    private float distanceprochainnoeud; //distance parcourue du sous-noeud en m
 
     //Constructeur
 
@@ -30,9 +30,9 @@ public class Voiture{
         this.freinage=abs(freinage);
         vitesse=0;
         accident=false;
-        dansnoeud=false;
         noeud=null;
         this.vitesse_max=vitesse_max;
+        this.distanceprochainnoeud=100;
     }
 
     //Getter setter
@@ -92,14 +92,6 @@ public class Voiture{
         this.freinage = freinage;
     }
 
-    public boolean isDansnoeud() {
-        return dansnoeud;
-    }
-
-    public void setDansnoeud(boolean dansnoeud) {
-        this.dansnoeud = dansnoeud;
-    }
-
     public Noeud getNoeud() {
         return noeud;
     }
@@ -123,16 +115,23 @@ public class Voiture{
     public void setExit(boolean exit) {
         this.exit = exit;
     }
+
+    public float getDistanceprochainnoeud() {
+        return distanceprochainnoeud;
+    }
+
+    public void setDistanceprochainnoeud(float distanceprochainnoeud) {
+        this.distanceprochainnoeud = distanceprochainnoeud;
+    }
+
+    public float getVitesse_max() {
+        return vitesse_max;
+    }
+
     //Méthodes
 
     public void accelerer(){
         this.vitesse+=acceleration;
-    }
-
-    public void arreter(){
-        while(this.vitesse>0){
-            freiner();
-        }
     }
 
     public void freiner(){
@@ -147,46 +146,5 @@ public class Voiture{
 
     public void setDessinvoiture(Rectangle dessinvoiture) {
         this.dessinvoiture = dessinvoiture;
-    }
-
-    //Méthode run
-
-    public void run() {
-        while (!exit) {
-            accelerer();
-            if(isDansnoeud()) { //si il est dans un carrefour
-                switch (direction) {//1=haut 2=droite 3=bas 4=gauche
-                    case 1:
-                        sousnoeud = noeud.getHaut();
-                        noeud = null;
-                        dansnoeud = false;
-                        break;
-                    case 2:
-                        sousnoeud = noeud.getDroite();
-                        noeud = null;
-                        dansnoeud = false;
-                        break;
-                    case 3:
-                        sousnoeud = noeud.getBas();
-                        noeud = null;
-                        dansnoeud = false;
-                        break;
-                    case 4:
-                        sousnoeud = noeud.getGauche();
-                        noeud = null;
-                        dansnoeud = false;
-                }
-            }else{//Si il est dans un sous-noeud
-                if(sousnoeud.getSousnoeud2()!=null)
-                sousnoeud=sousnoeud.getSousnoeud2();
-                else if(sousnoeud.getNoeud()!=null){
-                    noeud=sousnoeud.getNoeud();
-                    sousnoeud=null;
-                }
-                else exit=true;//Si il atteint la fin de la map, sera détruit par le garbagecollecteur
-            }
-
-        }
-
     }
 }

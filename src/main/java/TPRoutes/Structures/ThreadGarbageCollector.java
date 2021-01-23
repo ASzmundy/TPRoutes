@@ -8,11 +8,9 @@ import java.util.ArrayList;
 
 public class ThreadGarbageCollector extends Thread{
     ArrayList<Voiture> voitures;
-    ArrayList<Rectangle> dessinvoitures;
     Group root;
-    public ThreadGarbageCollector(ArrayList<Voiture> voitures, ArrayList<Rectangle> dessinvoitures, Group root){
+    public ThreadGarbageCollector(ArrayList<Voiture> voitures, Group root){
         this.voitures=voitures;
-        this.dessinvoitures=dessinvoitures;
         this.root=root;
     }
 
@@ -23,8 +21,7 @@ public class ThreadGarbageCollector extends Thread{
         for(Voiture voiture: voitures){
             if(voiture.isExit()){
                 voitures.remove(i);
-                root.getChildren().remove(dessinvoitures.get(i));
-                dessinvoitures.remove(i);
+                root.getChildren().remove(voiture.getDessinvoiture());
             }
             i++;
         }
