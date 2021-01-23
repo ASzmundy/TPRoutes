@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -48,6 +49,26 @@ public class FenetreApplication extends Application {
                 Rectangle recnode = new Rectangle(noeud.getX()*zoom,noeud.getY()*zoom,zoom/5,zoom/5);
                 recnode.setFill(Color.BLUE);
                 root.getChildren().add(recnode);
+                //Ajout des feux
+                Circle circlefeuup = new Circle((noeud.getX()*zoom)-zoom/10,(noeud.getY()*zoom)-zoom/10,zoom/20);
+                Circle circlefeudown = new Circle((noeud.getX()*zoom)+zoom/3,(noeud.getY()*zoom)+zoom/3,zoom/20);
+                Circle circlefeuleft = new Circle((noeud.getX()*zoom)-zoom/10,(noeud.getY()*zoom)+zoom/3,zoom/20);
+                Circle circlefeuright = new Circle((noeud.getX()*zoom)+zoom/3,(noeud.getY()*zoom)-zoom/10,zoom/20);
+                if (noeud.isFeu()){
+                    circlefeuup.setFill(Color.RED);
+                    circlefeudown.setFill(Color.RED);
+                    circlefeuleft.setFill(Color.GREEN);
+                    circlefeuright.setFill(Color.GREEN);
+                }else{
+                    circlefeuup.setFill(Color.GREEN);
+                    circlefeudown.setFill(Color.GREEN);
+                    circlefeuleft.setFill(Color.RED);
+                    circlefeuright.setFill(Color.RED);
+                }
+                root.getChildren().add(circlefeuup);
+                root.getChildren().add(circlefeudown);
+                root.getChildren().add(circlefeuleft);
+                root.getChildren().add(circlefeuright);
                 // ajout des sous noeuds entre les carrefours
                 Rectangle between;
                 // à gauche
@@ -227,6 +248,7 @@ public class FenetreApplication extends Application {
                 throw new ExceptionSensIncorrect();
             }
             dessinvoiture.setFill(Color.RED);
+            voiture.setDessinvoiture(dessinvoiture);
             root.getChildren().add(dessinvoiture);
             voituredessins.add(dessinvoiture);
         }

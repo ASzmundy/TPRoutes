@@ -1,19 +1,22 @@
 package TPRoutes.Structures;
 
 
+import java.util.Random;
+
 //Cette classe modélise un noeud/un carrefour
 public class Noeud {
     private int x;
     private int y;
-    private byte feu;//1=vert 2=orange 3=rouge
+    private boolean feu;//1=vert 2=orange 3=rouge
     private Sousnoeud haut,bas,gauche,droite;
 
 
     //Constructeur
     public Noeud(int x, int y) {
+        Random rd = new Random();
         this.x = x;
         this.y = y;
-        feu=1;
+        feu=rd.nextBoolean();
         haut=null;
         bas=null;
         gauche=null;
@@ -36,11 +39,11 @@ public class Noeud {
         this.y = y;
     }
 
-    public byte getFeu() {
+    public boolean isFeu() {
         return feu;
     }
 
-    public void setFeu(byte feu) {
+    public void setFeu(boolean feu) {
         this.feu = feu;
     }
 

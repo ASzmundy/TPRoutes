@@ -2,6 +2,7 @@ package TPRoutes.Vehicules;
 
 import TPRoutes.Structures.Noeud;
 import TPRoutes.Structures.Sousnoeud;
+import javafx.scene.shape.Rectangle;
 
 import static java.lang.Math.abs;
 
@@ -16,6 +17,7 @@ public class Voiture{
     private Sousnoeud sousnoeud;
     private boolean exit;
     private float vitesse_max;
+    private Rectangle dessinvoiture;
 
     //Constructeur
 
@@ -137,6 +139,14 @@ public class Voiture{
         this.vitesse-=freinage;
         if(vitesse<=0) vitesse=0;
 
+    }
+
+    public Rectangle getDessinvoiture() {
+        return dessinvoiture;
+    }
+
+    public void setDessinvoiture(Rectangle dessinvoiture) {
+        this.dessinvoiture = dessinvoiture;
     }
 
     //Méthode run
