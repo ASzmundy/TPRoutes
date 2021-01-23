@@ -25,7 +25,7 @@ public class Voiture{
         this.x = sousnoeud.getX();
         this.y = sousnoeud.getY();
         this.sousnoeud=sousnoeud;
-        this.direction = (byte)((direction%4)+1);
+        this.direction = direction;
         this.acceleration = abs(acceleration);
         this.freinage=abs(freinage);
         vitesse=0;

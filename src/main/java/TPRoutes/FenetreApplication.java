@@ -160,7 +160,7 @@ public class FenetreApplication extends Application {
             if(nbvoitures>0) {
                 for (Voiture autrevoiture:voitures) { //On vérifie pour chaque voiture existante...
                     if (autrevoiture.getNoeud() == noeudchoisi) { //si le noeud choisi est occupé
-                        if (senshasardint == 1 || senshasard == 3) { //si on est en haut ou en bas
+                        if (senshasard == 1 || senshasard == 3) { //si on est en haut ou en bas
                             if (matrice.getMatrice()[y][x - 1] != null) { // on le place à gauche si il existe un noeud à gauche
                                 noeudchoisi = matrice.getMatrice()[x - 1][y];
                             } else if (matrice.getMatrice()[y][x + 1] != null) { // sinon on le place à droite si le noeud à droite existe
@@ -168,7 +168,7 @@ public class FenetreApplication extends Application {
                             } else {//si il y a plus de place
                                 noeudchoisi = null;
                             }
-                        } else if (senshasardint == 2 || senshasardint == 4) { //si on est à gauche ou à droite
+                        } else if (senshasard == 2 || senshasard == 4) { //si on est à gauche ou à droite
                             if (matrice.getMatrice()[y - 1][x] != null) { // on le place en haut si il exite un noeud en haut
                                 noeudchoisi = matrice.getMatrice()[y - 1][x];
                             } else if (matrice.getMatrice()[y + 1][x] != null) { // sinon on le place en bas si le noeud en bas existe
@@ -186,7 +186,7 @@ public class FenetreApplication extends Application {
             if(noeudchoisi!=null) {//si il y a de la place
                 //On prend le sousnoeud au bord de la map
                 Sousnoeud sousnoeudchoisi;
-                switch (senshasardint){ //On va prendre le sousnoeud correspondant où faire apparaitre la voiture
+                switch (senshasard){ //On va prendre le sousnoeud correspondant où faire apparaitre la voiture
                     case 1: //le véhicule va de bas en haut
                         sousnoeudchoisi=noeudchoisi.getBas().getSousnoeud2();
                         break;
@@ -222,28 +222,25 @@ public class FenetreApplication extends Application {
             float x,y;
             switch (sens){
                 case 1: //bas en haut
-                    x=sousnoeudvoiture.getX()*zoom+zoom/20;
+                    x=sousnoeudvoiture.getX()*zoom+zoom/8;
                     y=sousnoeudvoiture.getY()*zoom;
                     break;
                 case 2://gauche à droite
                     x=sousnoeudvoiture.getX()*zoom;
-                    y=sousnoeudvoiture.getY()*zoom+zoom/20;
+                    y=sousnoeudvoiture.getY()*zoom+zoom/8;
                     break;
                 case 3://haut en bas
-                    x=sousnoeudvoiture.getX()*zoom-zoom/20;
-                    y=sousnoeudvoiture.getY()*zoom;
-                    break;
                 case 4://droite à gauche
                     x=sousnoeudvoiture.getX()*zoom;
-                    y=sousnoeudvoiture.getY()*zoom-zoom/20;
+                    y=sousnoeudvoiture.getY()*zoom;
                     break;
                 default:
                     throw new ExceptionSensIncorrect();
             }
             if(sens == 1 || sens == 3){
-                dessinvoiture = new Rectangle(x,y,longueurvoiture, largeurvoiture);
-            }else if (sens == 2 || sens == 4){
                 dessinvoiture = new Rectangle(x,y,largeurvoiture,longueurvoiture);
+            }else if (sens == 2 || sens == 4){
+                dessinvoiture = new Rectangle(x,y,longueurvoiture, largeurvoiture);
             }else{
                 throw new ExceptionSensIncorrect();
             }

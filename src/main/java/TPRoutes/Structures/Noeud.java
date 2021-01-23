@@ -7,7 +7,7 @@ import java.util.Random;
 public class Noeud {
     private int x;
     private int y;
-    private boolean feu;//1=vert 2=orange 3=rouge
+    private boolean feu;//true = haut bas en vert ; false = gauche droite en vert
     private Sousnoeud haut,bas,gauche,droite;
 
 
