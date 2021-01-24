@@ -7,6 +7,7 @@ import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -20,22 +21,29 @@ public class ThreadVoitures extends Thread{
         this.zoom=zoom;
     }
 
-    public ArrayList<Voiture> getVoitures() {
-        return voitures;
+    private void changerCoordonnees(Voiture voiture, float x, float y){
+        voiture.setX(x);
+        voiture.setY(y);
     }
 
+    private void changerDessin(Voiture voiture, double x, double y){
+        voiture.getDessinvoiture().setX(x);
+        voiture.getDessinvoiture().setY(y);
+    }
+
+
+
     //méthode run
-
-
     @Override
     public void run() {
         super.run();
         Timeline chronologie = new Timeline(new KeyFrame(Duration.millis(60), // définition du temps du cycle
                 action -> {
 
-        for (Voiture voiture:voitures) {
+        for (Voiture voiture:voitures) { //Répéter sur toutes les voitures
+            //Si la voiture est dans un noeud
             if(voiture.getNoeud()!=null) {
-                //Si la voiture est dans un noeud
+                voiture.accelerer();
                 switch (voiture.getDirection()){ //Va prendre le bon sousnoeud
                     case 1: //bas en haut
                         voiture.setSousnoeud(voiture.getNoeud().getHaut());
@@ -56,9 +64,12 @@ public class ThreadVoitures extends Thread{
                     default:
                         voiture.setExit(true);
                 }
-            }else if(voiture.getSousnoeud()!=null){
-                //Si la voiture est dans un sousnoeud
-                if (voiture.getSousnoeud().getSousnoeud1() != null) {
+            }
+
+
+            //Si la voiture est dans un sousnoeud
+            else if(voiture.getSousnoeud()!=null){
+                if (voiture.getSousnoeud().getSousnoeud1() != null) { // Si elle va dans un autre sousnoeud
                     //Remonter le sousnoeud
                     voiture.accelerer();
                     if(voiture.getDistanceprochainnoeud() <= voiture.getVitesse()) { //Si il va transiter dans le prochain sousnoeud
@@ -72,33 +83,41 @@ public class ThreadVoitures extends Thread{
                         switch (voiture.getDirection()) { //Va ajouter la progression du sous-noeud dans les coordonnées
                             case 1: //bas en haut
                                 voiture.setY(voiture.getSousnoeud().getSousnoeud1().getY() - (voiture.getDistanceprochainnoeud()) / 100);
-                                path.getElements().add(new MoveTo(voiture.getX() + zoom / 8, voiture.getY()));
+                                voiture.getDessinvoiture().setY(voiture.getSousnoeud().getY()*zoom - (voiture.getDistanceprochainnoeud()) / 100);
+                                path.getElements().add(new MoveTo(voiture.getDessinvoiture().getX() + zoom / 8, voiture.getY()));
                                 break;
                             case 2: //gauche à droite
                                 voiture.setX(voiture.getSousnoeud().getSousnoeud1().getX() + (voiture.getDistanceprochainnoeud()) / 100);
-                                path.getElements().add(new MoveTo(voiture.getX(), voiture.getY() + zoom / 8));
+                                voiture.getDessinvoiture().setX(voiture.getSousnoeud().getX()*zoom + (voiture.getDistanceprochainnoeud()) / 100);
+                                path.getElements().add(new MoveTo(voiture.getDessinvoiture().getX(), voiture.getY() + zoom / 8));
                                 break;
                             case 3: //haut en bas
-                                voiture.setY(voiture.getSousnoeud().getSousnoeud1().getY() + (voiture.getDistanceprochainnoeud()) / 100);
-                                path.getElements().add(new MoveTo(voiture.getX(), voiture.getY()));
+                                changerCoordonnees(voiture,voiture.getX(),voiture.getSousnoeud().getSousnoeud1().getY());
+                                changerDessin(voiture,voiture.getDessinvoiture().getX(),voiture.getSousnoeud().getY()*zoom + (voiture.getDistanceprochainnoeud()) / 100);
+                                path.getElements().add(new MoveTo(voiture.getDessinvoiture().getX(), voiture.getY()));
                                 break;
                             case 4: //droite à gauche
                                 voiture.setX(voiture.getSousnoeud().getSousnoeud1().getX() - (voiture.getDistanceprochainnoeud()) / 100);
-                                path.getElements().add(new MoveTo(voiture.getX(), voiture.getY()));
+                                voiture.getDessinvoiture().setX(voiture.getSousnoeud().getX()*zoom - (voiture.getDistanceprochainnoeud()) / 100);
+                                changerDessin(voiture,voiture.getSousnoeud().getX()*zoom - (voiture.getDistanceprochainnoeud()) / 100,voiture.getDessinvoiture().getY());
+                                path.getElements().add(new MoveTo(voiture.getDessinvoiture().getX(), voiture.getY()));
                                 break;
                             default:
                                 voiture.setExit(true);
                         }//Sortie switch
-                    }else if(voiture.getSousnoeud().getNoeud()!=null){
-                        voiture.setX(voiture.getSousnoeud().getNoeud().getX());
-                        voiture.setY(voiture.getSousnoeud().getNoeud().getY());
+                    }else if(voiture.getSousnoeud().getNoeud()!=null){//Si elle entre dans un sousnoeud
+                        changerCoordonnees(voiture,voiture.getSousnoeud().getNoeud().getX(),voiture.getSousnoeud().getNoeud().getY());
                     }else voiture.setExit(true);
+
                     //Anime le déplacement
                     PathTransition pathTransition = new PathTransition(Duration.millis(10),path,voiture.getDessinvoiture());
                     pathTransition.setCycleCount(1);
                     pathTransition.setAutoReverse(false);
                     pathTransition.play();
-                } else if (voiture.getSousnoeud().getNoeud() != null) { //Si elle va dans un noeud
+                }
+
+                //Si elle va dans un noeud
+                else if (voiture.getSousnoeud().getNoeud() != null) {
                     //Prendre le noeud du sousnoeud
                     if(voiture.getDirection()==1||voiture.getDirection()==3){ //gestion des feux
                         if(voiture.getSousnoeud().getNoeud().isFeu()){

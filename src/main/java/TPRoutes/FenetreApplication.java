@@ -31,12 +31,12 @@ public class FenetreApplication extends Application {
     public void start(Stage primaryStage) throws ExceptionSensIncorrect {
         //ON SUPPOSE QU'IL Y A 100m ENTRE CHAQUE NOEUD
         //CHOIX DES VARIABLES
-        int taillematrice = 10; //n noeuds * n noeuds
+        int taillematrice = 5; //n noeuds * n noeuds
         float concentration_sousnoeuds = 3; //n sous-noeuds entre 2 noeuds (je l'ai mis en float pour enlever les erreurs mais normalement c'est un int)
-        int zoom = 50; //Zoom
+        int zoom = 100; //Zoom
         int nbvoituresmax = 10; //Nombre max de voitures max présentes sur la map
         float acceleration = 5; //Nb de m/cycle gagné en accélérant
-        float freinage = 7; //Nb de m/cycle
+        float freinage = 25; //Nb de m/cycle
         float vitessemax = 14; //Vitesse max des véhicules
 
 
@@ -130,6 +130,8 @@ public class FenetreApplication extends Application {
             }
         }
 
+
+
         //Spawn des voitures
         int nbvoitures = 0;
 
@@ -221,6 +223,9 @@ public class FenetreApplication extends Application {
             }
         }
 
+
+
+
         //Dessin et Affichage des voitures
         float largeurvoiture = zoom / 12;
         float longueurvoiture = zoom / 8;
@@ -258,13 +263,16 @@ public class FenetreApplication extends Application {
             root.getChildren().add(dessinvoiture);
         }
 
+
         //Garbage collector
         ThreadGarbageCollector TGC = new ThreadGarbageCollector(voitures, root);
         TGC.start();
 
+
         //Thread de gestion des feux
         ThreadMatrice TM = new ThreadMatrice(matrice,taillematrice);
         TM.start();
+
 
         //Thread de comportement des voitures
         ThreadVoitures threadVoitures = new ThreadVoitures(voitures, zoom);
