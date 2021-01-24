@@ -5,6 +5,7 @@ import TPRoutes.Structures.Matrice;
 import TPRoutes.Structures.Noeud;
 import TPRoutes.Structures.Sousnoeud;
 import TPRoutes.Structures.ThreadGarbageCollector;
+import TPRoutes.Structures.ThreadMatrice;
 import TPRoutes.Structures.ThreadVoitures;
 import TPRoutes.Vehicules.Voiture;
 import javafx.animation.KeyFrame;
@@ -18,6 +19,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -68,6 +71,9 @@ public class FenetreApplication extends Application {
                     circlefeuleft.setFill(Color.RED);
                     circlefeuright.setFill(Color.RED);
                 }
+                ArrayList<Circle> feux= new ArrayList<>();
+                feux.add(circlefeudown); feux.add(circlefeuleft) ; feux.add(circlefeuup); feux.add(circlefeuright);
+                noeud.setDessinfeux(feux);
                 root.getChildren().add(circlefeuup);
                 root.getChildren().add(circlefeudown);
                 root.getChildren().add(circlefeuleft);
@@ -252,14 +258,20 @@ public class FenetreApplication extends Application {
             root.getChildren().add(dessinvoiture);
         }
 
+        //Garbage collector
+        ThreadGarbageCollector TGC = new ThreadGarbageCollector(voitures, root);
+        TGC.start();
+
+        //Thread de gestion des feux
+        ThreadMatrice TM = new ThreadMatrice(matrice,taillematrice);
+        TM.start();
+
+        //Thread de comportement des voitures
         ThreadVoitures threadVoitures = new ThreadVoitures(voitures, zoom);
         threadVoitures.start();
 
-
-        //Garbage collector
-        ThreadGarbageCollector TGC = new ThreadGarbageCollector(voitures, root);
-
         primaryStage.show();
+
     }
     public static void main (String[]args){
         launch(args);

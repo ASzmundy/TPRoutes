@@ -67,7 +67,7 @@ public class ThreadVoitures extends Thread{
                     }else{//Sinon va avancer dans le sous-noeud
                         voiture.setDistanceprochainnoeud(voiture.getDistanceprochainnoeud()-voiture.getVitesse());
                     }
-                    Path path = new Path();
+                    Path path=new Path();
                     if (voiture.getSousnoeud().getSousnoeud1() != null) {
                         switch (voiture.getDirection()) { //Va ajouter la progression du sous-noeud dans les coordonnées
                             case 1: //bas en haut
@@ -94,8 +94,9 @@ public class ThreadVoitures extends Thread{
                         voiture.setY(voiture.getSousnoeud().getNoeud().getY());
                     }else voiture.setExit(true);
                     //Anime le déplacement
-                    PathTransition pathTransition = new PathTransition(Duration.millis(1000), path, voiture.getDessinvoiture());
-                    pathTransition.setCycleCount(Timeline.INDEFINITE);
+                    PathTransition pathTransition = new PathTransition(Duration.millis(10),path,voiture.getDessinvoiture());
+                    pathTransition.setCycleCount(1);
+                    pathTransition.setAutoReverse(false);
                     pathTransition.play();
                 } else if (voiture.getSousnoeud().getNoeud() != null) { //Si elle va dans un noeud
                     //Prendre le noeud du sousnoeud

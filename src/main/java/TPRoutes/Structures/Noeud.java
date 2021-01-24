@@ -1,6 +1,9 @@
 package TPRoutes.Structures;
 
 
+import javafx.scene.shape.Circle;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 //Cette classe modélise un noeud/un carrefour
@@ -8,6 +11,7 @@ public class Noeud {
     private int x;
     private int y;
     private boolean feu;//true = haut bas en vert ; false = gauche droite en vert
+    private ArrayList<Circle> dessinfeux;
     private Sousnoeud haut,bas,gauche,droite;
 
 
@@ -77,5 +81,13 @@ public class Noeud {
 
     public void setDroite(Sousnoeud droite) {
         this.droite = droite;
+    }
+
+    public ArrayList<Circle> getDessinfeux() {
+        return dessinfeux;
+    }
+
+    public void setDessinfeux(ArrayList<Circle> dessinfeux) {
+        this.dessinfeux = dessinfeux;
     }
 }
